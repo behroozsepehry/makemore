@@ -1,7 +1,15 @@
 import os
 from dataset import NameDataset
 from generators import DumbNameGenerator, NGramNameGenerator
-from config import DATA_DIR, NAMES_FILE, URL, BATCH_SIZE, EVAL_BATCH_SIZE, MAX_K_FOR_NGRAM, NUM_GENERATED_NAMES
+from config import (
+    DATA_DIR,
+    NAMES_FILE,
+    URL,
+    BATCH_SIZE,
+    EVAL_BATCH_SIZE,
+    MAX_K_FOR_NGRAM,
+    NUM_GENERATED_NAMES,
+)
 
 
 def main():
@@ -64,7 +72,10 @@ def main():
         if i == 2:
             break
 
-    print("\nGenerated names (DumbNameGenerator):", dumb_generator.generate_names(NUM_GENERATED_NAMES))
+    print(
+        "\nGenerated names (DumbNameGenerator):",
+        dumb_generator.generate_names(NUM_GENERATED_NAMES),
+    )
 
     for k, ngram_generator in ngram_generators.items():
 
