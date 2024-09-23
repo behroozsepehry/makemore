@@ -35,13 +35,13 @@ def main():
 
         print(f"\nTraining {ngram_generator.get_generator_name()}...")
 
-        # Train the model on batches of data
-        for batch in dataset.get_batch(batch_size=BATCH_SIZE):
+        # Train the model on batches of training data
+        for batch in dataset.get_batch(is_train=True, batch_size=BATCH_SIZE):
             ngram_generator.train(batch)
 
         ngram_generators[k] = ngram_generator
 
-    # Evaluate all generators on a random batch of data
+    # Evaluate all generators on a random batch of test data
     eval_batch: list[list[str]] = [list("john>"), list("mary>"), list("robert>")]
 
     print("\nEvaluating generators on a sample batch:")
@@ -54,10 +54,12 @@ def main():
             f"Average log likelihood for {generator.get_generator_name()}: {avg_log_likelihood:.4f}"
         )
 
-    # Additional evaluation on larger batches of data
+    # Additional evaluation on larger batches of test data
     print("\nEvaluating generators on larger batches:")
 
-    for i, batch in enumerate(dataset.get_batch(batch_size=EVAL_BATCH_SIZE)):
+    for i, batch in enumerate(
+        dataset.get_batch(is_train=False, batch_size=EVAL_BATCH_SIZE)
+    ):
 
         print(f"Batch {i + 1}:")
 
