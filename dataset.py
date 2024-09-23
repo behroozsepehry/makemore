@@ -2,15 +2,15 @@ import requests
 import os
 from typing import List, Generator
 import random
-
+from config import TEST_SPLIT_RATIO
 
 class NameDataset:
 
-    def __init__(self, names_file: str, url: str, test_size=0.1):
+    def __init__(self, names_file: str, url: str):
         self.names_file: str = names_file
         self.url: str = url
         self.end_token: str = ">"
-        self.test_size: float = test_size
+        self.test_size: float = TEST_SPLIT_RATIO
         self.download_if_not_exists()
         self.names: List[str] = self.load_names()
         self.alphabet: List[str] = list(set("".join(self.names) + self.end_token))
