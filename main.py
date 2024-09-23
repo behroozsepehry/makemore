@@ -1,6 +1,7 @@
 import os
 from dataset import NameDataset
 from generators import DumbNameGenerator, NGramNameGenerator
+from config import DATA_DIR, NAMES_FILE, URL, BATCH_SIZE, EVAL_BATCH_SIZE, MAX_K_FOR_NGRAM, NUM_GENERATED_NAMES
 
 
 def main():
@@ -8,22 +9,18 @@ def main():
     current_dir = os.path.dirname(os.path.abspath(__file__))
 
     # Construct the absolute path to the data file
-    names_file: str = os.path.join(current_dir, "data", "names.txt")
+    names_file: str = os.path.join(current_dir, DATA_DIR, NAMES_FILE)
 
-    url: str = (
-        "https://raw.githubusercontent.com/dominictarr/random-name/master/first-names.txt"
-    )
-
-    dataset: NameDataset = NameDataset(names_file, url)
+    dataset: NameDataset = NameDataset(names_file, URL)
 
     dumb_generator: DumbNameGenerator = DumbNameGenerator(
         dataset.get_alphabet(), dataset.get_end_token()
     )
 
-    # Train N-gram models with k from 1 to 4
+    # Train N-gram models with k from 1 to MAX_K_FOR_NGRAM
     ngram_generators: dict[int, NGramNameGenerator] = {}
 
-    for k in range(1, 5):
+    for k in range(1, MAX_K_FOR_NGRAM + 1):
         ngram_generator: NGramNameGenerator = NGramNameGenerator(
             dataset.get_alphabet(), dataset.get_end_token(), k=k
         )
@@ -31,7 +28,7 @@ def main():
         print(f"\nTraining {ngram_generator.get_generator_name()}...")
 
         # Train the model on batches of data
-        for batch in dataset.get_batch(batch_size=100):
+        for batch in dataset.get_batch(batch_size=BATCH_SIZE):
             ngram_generator.train(batch)
 
         ngram_generators[k] = ngram_generator
@@ -52,7 +49,7 @@ def main():
     # Additional evaluation on larger batches of data
     print("\nEvaluating generators on larger batches:")
 
-    for i, batch in enumerate(dataset.get_batch(batch_size=100)):
+    for i, batch in enumerate(dataset.get_batch(batch_size=EVAL_BATCH_SIZE)):
 
         print(f"Batch {i + 1}:")
 
@@ -67,13 +64,13 @@ def main():
         if i == 2:
             break
 
-    print("\nGenerated names (DumbNameGenerator):", dumb_generator.generate_names(5))
+    print("\nGenerated names (DumbNameGenerator):", dumb_generator.generate_names(NUM_GENERATED_NAMES))
 
     for k, ngram_generator in ngram_generators.items():
 
         print(
             f"\nGenerated names ({ngram_generator.get_generator_name()}):",
-            ngram_generator.generate_names(5),
+            ngram_generator.generate_names(NUM_GENERATED_NAMES),
         )
 
     batch: list[list[str]] = [list("joh"), list("mar")]
