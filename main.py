@@ -9,10 +9,15 @@ from config import (
     EVAL_BATCH_SIZE,
     MAX_K_FOR_NGRAM,
     NUM_GENERATED_NAMES,
+    RANDOM_SEED,
 )
 
+import random
 
 def main():
+    # Set the random seed for reproducibility
+    random.seed(RANDOM_SEED)
+
     # Get the absolute path to the current directory (where main.py is located)
     current_dir = os.path.dirname(os.path.abspath(__file__))
 
