@@ -2,13 +2,14 @@ import os
 from dataset import NameDataset
 from generators import DumbNameGenerator, NGramNameGenerator
 
+
 def main():
     # Get the absolute path to the current directory (where main.py is located)
     current_dir = os.path.dirname(os.path.abspath(__file__))
 
     # Construct the absolute path to the data file
     names_file: str = os.path.join(current_dir, "data", "names.txt")
-    
+
     url: str = (
         "https://raw.githubusercontent.com/dominictarr/random-name/master/first-names.txt"
     )
